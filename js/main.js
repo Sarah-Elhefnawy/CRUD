@@ -12,11 +12,14 @@ function addProduct() {
         pName: productName.value,
         pPrice: productPrice.value,
         pCategory: productCategory.value,
-        pImage: "./images/chefs-1.jpg",
+        pImage: productImage.files[0]?.name,
         pDescription: productDescription.value
     }
+    if (product.pImage==undefined) {
+        product.pImage = "./chefs-1.jpg"
+    }
     allProduct.push(product);
-    console.log(allProduct);
+    // console.log(allProduct);
     // clear();
     display();
 }
@@ -36,7 +39,7 @@ function display() {
             <tr>
             <td>${index+1}</td>
             <td>
-                <img src="${allProduct[index].pImage}" alt="">
+                <img src="./images/${allProduct[index].pImage}" alt="">
             </td>
             <td>${allProduct[index].pName}</td>
             <td>${allProduct[index].pPrice}</td>
@@ -45,6 +48,5 @@ function display() {
         </tr> `
     }
     tr.innerHTML += cartoona;
-    console.log(cartoona);
-    
+    // console.log(cartoona);
 }
