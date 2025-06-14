@@ -15,20 +15,22 @@ if (localStorage.getItem("all") != null) {
 // localStorage.removeItem("all")
 
 function addProduct() {
-    var product = {
-        pName: productName.value,
-        pPrice: productPrice.value,
-        pCategory: productCategory.value,
-        pImage: productImage.files[0]?.name,
-        pDescription: productDescription.value
-    };
-    if (product.pImage == undefined) {
-        product.pImage = "./chefs-1.jpg";
+    if (validName() == true) {
+        var product = {
+            pName: productName.value,
+            pPrice: productPrice.value,
+            pCategory: productCategory.value,
+            pImage: productImage.files[0]?.name,
+            pDescription: productDescription.value
+        };
+        if (product.pImage == undefined) {
+            product.pImage = "./chefs-1.jpg";
+        }
+        allProduct.push(product);
+        localStorage.setItem("all", JSON.stringify(allProduct))
+        clear();
+        display();
     }
-    allProduct.push(product);
-    localStorage.setItem("all", JSON.stringify(allProduct))
-    clear();
-    display();
 }
 
 function clear() {
@@ -119,3 +121,12 @@ function updateProduct() {
     updateBtn.classList.replace("d-block", "d-none");
 }
 
+function validName() {
+    var regex = /^[A-Z][a-z]{4,10}[0-9]{0,4}$/;
+    if (regex.test(productName.value)) {
+        document.getElementById("name").classList.replace("d-block","d-none");
+        return true;
+    }
+    document.getElementById("name").classList.replace("d-none","d-block");
+    return false;
+}
