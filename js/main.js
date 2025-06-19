@@ -8,10 +8,20 @@ var addBtn = document.getElementById("addBtn");
 var updateBtn = document.getElementById("updateBtn");
 
 var allProduct = [];
-if (localStorage.getItem("all") != null) {
-    allProduct = JSON.parse(localStorage.getItem("all"));
-    display();
+
+// Ammar
+if (localStorage.getItem("allProduct")) {
+    allProduct = JSON.parse(localStorage.getItem("allProduct"));
+    display(allProduct);
 }
+else{
+    tr.innerHTML = "no data avilable"
+}
+
+// if (localStorage.getItem("all") != null) {
+//     allProduct = JSON.parse(localStorage.getItem("all"));
+//     display();
+// }
 // localStorage.removeItem("all")
 
 function addProduct() {
@@ -27,9 +37,16 @@ function addProduct() {
             product.pImage = "./chefs-1.jpg";
         }
         allProduct.push(product);
-        localStorage.setItem("all", JSON.stringify(allProduct))
         clear();
-        display();
+
+
+        // localStorage.setItem("all", JSON.stringify(allProduct))
+        // display();
+
+
+        // Ammar
+        display(allProduct);
+        saveDataInLocalStorage();
     }
 }
 
@@ -41,9 +58,15 @@ function clear() {
     productDescription.value = "";
 }
 
-function display() {
+// Ammar 
+function saveDataInLocalStorage() {
+    localStorage.setItem("allProduct", JSON.stringify(allProduct) )
+}
+
+//    Ammar
+function display(arr) {
     var cartoona = "";
-    for (let index = 0; index < allProduct.length; index++) {
+    for (let index = 0; index < arr.length; index++) {
         cartoona += `
             <tr>
             <td>${index + 1}</td>
@@ -59,37 +82,75 @@ function display() {
         </tr> `
     }
     tr.innerHTML = cartoona;
-    // console.log(cartoona);
 }
+
+// function display() {
+//     var cartoona = "";
+//     for (let index = 0; index < allProduct.length; index++) {
+//         cartoona += `
+//             <tr>
+//             <td>${index + 1}</td>
+//             <td>
+//                 <img src="./images/${allProduct[index].pImage}" alt="">
+//             </td>
+//             <td>${allProduct[index].pName}</td>
+//             <td>${allProduct[index].pPrice}</td>
+//             <td>${allProduct[index].pCategory}</td>
+//             <td>${allProduct[index].pDescription}</td>
+//             <td><button onclick="deleteProduct(${index})" class="btn btn-danger">delete</button></td>
+//             <td><button onclick="preUpdate(${index})" class="btn btn-warning">update</button></td>
+//         </tr> `
+//     }
+//     tr.innerHTML = cartoona;
+//     // console.log(cartoona);
+// }
 
 function deleteProduct(index) {
     allProduct.splice(index, 1);
     localStorage.setItem("all", JSON.stringify(allProduct));
-    display();
-}
+    
+    // Ammar
+    display(allProduct);
+    // display();
 
-function searchByName(term) {
-    var cartoona = "";
+    // Ammar
+    saveDataInLocalStorage();
+}
+// Ammar
+function searchByName(event) {
+    var target = event.target.value;
+    var searchedProduct = [];
     for (let index = 0; index < allProduct.length; index++) {
-        var productItem = allProduct[index].pName;
-        if (productItem.trim().toLowerCase().includes(term.toLowerCase().trim())) {
-            cartoona += `
-            <tr>
-            <td>${index + 1}</td>
-            <td>
-                <img src="./images/${allProduct[index].pImage}" alt="">
-            </td>
-            <td>${allProduct[index].pName}</td>
-            <td>${allProduct[index].pPrice}</td>
-            <td>${allProduct[index].pCategory}</td>
-            <td>${allProduct[index].pDescription}</td>
-            <td><button onclick="deleteProduct(${index})" class="btn btn-danger">delete</button></td>
-            <td><button onclick="preUpdate(${index})" class="btn btn-warning">update</button></td>
-        </tr> `
+        if (allProduct[i].trim().toLowerCase().includes(target.toLowerCase().trim())) {
+            searchedProduct.push(allProduct[index])
         }
     }
-    tr.innerHTML = cartoona;
+    display(searchedProduct);
 }
+addBtn.addEventListener('input',searchByName)
+
+// function searchByName(term) {
+//     var cartoona = "";
+//     for (let index = 0; index < allProduct.length; index++) {
+//         var productItem = allProduct[index].pName;
+//         if (productItem.trim().toLowerCase().includes(term.toLowerCase().trim())) {
+//             cartoona += `
+//             <tr>
+//             <td>${index + 1}</td>
+//             <td>
+//                 <img src="./images/${allProduct[index].pImage}" alt="">
+//             </td>
+//             <td>${allProduct[index].pName}</td>
+//             <td>${allProduct[index].pPrice}</td>
+//             <td>${allProduct[index].pCategory}</td>
+//             <td>${allProduct[index].pDescription}</td>
+//             <td><button onclick="deleteProduct(${index})" class="btn btn-danger">delete</button></td>
+//             <td><button onclick="preUpdate(${index})" class="btn btn-warning">update</button></td>
+//         </tr> `
+//         }
+//     }
+//     tr.innerHTML = cartoona;
+// }
 
 mainIndex;
 function preUpdate(index) {
